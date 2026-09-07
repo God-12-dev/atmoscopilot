@@ -1,0 +1,330 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * WeatherGPT — AI-Powered Weather Intelligence & Disaster Resilience Platform
+ * Design System: Professional dual-theme (Light + Dark) with weather-intelligence personality.
+ *
+ * LIGHT THEME: Soft blue-gray page bg, white cards with shadows, navy text, sky-blue primary.
+ * DARK THEME:  Deep navy page bg, elevated card surfaces, electric sky-blue primary, cyan accents.
+ *
+ * Shared utilities: .glass, .gradient-text, .gradient-accent, .gradient-alert, .glow, .glow-alert,
+ *   .risk-low, .risk-moderate, .risk-high, .risk-critical, .weather-card-glow, .skeleton,
+ *   .status-pill, .badge-info, .badge-watch, .badge-warning, .badge-critical
+ */
+
+/* ─── LIGHT THEME ───────────────────────────────────────────────────────── */
+:root {
+  --background:           214 32% 94%;      /* #EEF2F8 — soft blue-gray page */
+  --background-subtle:    214 28% 91%;      /* slightly deeper for sections  */
+  --foreground:           222 47% 11%;      /* #0F1623 — dark navy text       */
+  --card:                 0   0%  100%;     /* pure white cards               */
+  --card-foreground:      222 40% 14%;
+  --card-elevated:        210 40% 98%;      /* very slightly tinted white     */
+  --border:               214 20% 87%;      /* subtle blue-gray border        */
+  --border-strong:        214 20% 78%;
+  --primary:              205 95% 42%;      /* #0693D6 — deep sky blue        */
+  --primary-foreground:   0   0%  100%;
+  --primary-light:        199 89% 95%;      /* tinted primary bg              */
+  --secondary:            197 70% 50%;      /* sky blue / cyan                */
+  --muted:                214 24% 92%;
+  --muted-foreground:     220 14% 46%;
+  --ring:                 205 95% 42%;
+  --chart-grid:           214 18% 84%;
+
+  /* Weather status palette */
+  --status-safe:          142 71% 45%;
+  --status-watch:         45  93% 47%;
+  --status-warning:       25  95% 53%;
+  --status-critical:      0   84% 60%;
+  --status-info:          213 89% 56%;
+
+  /* Glass surface */
+  --glass-bg:             255 255 255 / 0.72;
+  --glass-border:         214 30% 88% / 0.9;
+
+  /* Gradient stops */
+  --gradient-from:        205 95% 42%;      /* primary blue   */
+  --gradient-to:          197 70% 50%;      /* secondary cyan */
+  --gradient-alert-from:  0   84% 60%;
+  --gradient-alert-to:    25  95% 53%;
+
+  /* Shadows (light) */
+  --shadow-card:          0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-card-hover:    0 4px 12px 0 rgb(0 0 0 / 0.10), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+  --shadow-elevated:      0 10px 24px -4px rgb(0 0 0 / 0.12), 0 4px 8px -2px rgb(0 0 0 / 0.07);
+}
+
+/* ─── DARK THEME ────────────────────────────────────────────────────────── */
+.dark {
+  --background:           222 47% 6%;       /* #0B0F19 — deep navy midnight   */
+  --background-subtle:    222 40% 8%;
+  --foreground:           210 20% 96%;
+  --card:                 222 40% 10%;      /* elevated dark surface          */
+  --card-foreground:      210 20% 96%;
+  --card-elevated:        222 36% 13%;
+  --border:               220 25% 20%;
+  --border-strong:        220 25% 28%;
+  --primary:              199 89% 52%;      /* #38BDF8 electric sky blue      */
+  --primary-foreground:   222 47% 6%;
+  --primary-light:        199 89% 16%;
+  --secondary:            197 80% 60%;
+  --muted:                220 28% 14%;
+  --muted-foreground:     220 12% 62%;
+  --ring:                 199 89% 52%;
+  --chart-grid:           220 20% 22%;
+
+  --status-safe:          142 71% 45%;
+  --status-watch:         45  93% 52%;
+  --status-warning:       25  95% 58%;
+  --status-critical:      0   84% 62%;
+  --status-info:          213 89% 62%;
+
+  --glass-bg:             15 23 42 / 0.78;
+  --glass-border:         255 255 255 / 0.07;
+
+  --gradient-from:        199 89% 52%;
+  --gradient-to:          197 80% 60%;
+  --gradient-alert-from:  0   84% 62%;
+  --gradient-alert-to:    25  95% 58%;
+
+  --shadow-card:          0 1px 3px 0 rgb(0 0 0 / 0.4);
+  --shadow-card-hover:    0 4px 16px 0 rgb(0 0 0 / 0.45);
+  --shadow-elevated:      0 10px 32px -4px rgb(0 0 0 / 0.55);
+}
+
+/* ─── BASE ──────────────────────────────────────────────────────────────── */
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Light mode page texture — very subtle to avoid pure flat white */
+body {
+  background-image: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(205 95% 42% / 0.06), transparent 70%);
+}
+
+/* Dark mode ambient glows */
+.dark body {
+  background-image:
+    radial-gradient(ellipse 60% 50% at 8% 0%,    hsl(199 89% 52% / 0.14), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 95% 100%,  hsl(197 80% 60% / 0.10), transparent 60%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ─── GLASS SURFACES ────────────────────────────────────────────────────── */
+.glass {
+  background-color: rgb(var(--glass-bg));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgb(var(--glass-border));
+}
+
+.dark .glass {
+  box-shadow: 0 8px 32px 0 rgb(0 0 0 / 0.35), inset 0 1px 0 0 rgb(255 255 255 / 0.04);
+}
+
+/* ─── CARD SHADOWS ──────────────────────────────────────────────────────── */
+.card-shadow {
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease;
+}
+.card-shadow:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+.card-elevated {
+  box-shadow: var(--shadow-elevated);
+}
+
+/* ─── GRADIENTS ─────────────────────────────────────────────────────────── */
+.gradient-text {
+  background-image: linear-gradient(135deg, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-accent {
+  background-image: linear-gradient(135deg, hsl(var(--gradient-from)), hsl(var(--gradient-to)));
+}
+
+.gradient-hero {
+  background-image: linear-gradient(135deg, hsl(205 95% 42%), hsl(197 80% 55%), hsl(270 60% 60%));
+}
+
+.gradient-alert {
+  background-image: linear-gradient(135deg, hsl(var(--gradient-alert-from)), hsl(var(--gradient-alert-to)));
+}
+
+/* ─── GLOWS ─────────────────────────────────────────────────────────────── */
+.glow {
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.3), 0 0 24px 0 hsl(var(--primary) / 0.22);
+}
+
+.glow-alert {
+  box-shadow: 0 0 0 1px hsl(var(--gradient-alert-from) / 0.35), 0 0 24px 0 hsl(var(--gradient-alert-from) / 0.22);
+}
+
+.glow-sm {
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.2), 0 0 12px 0 hsl(var(--primary) / 0.15);
+}
+
+/* ─── RISK / STATUS BADGES ──────────────────────────────────────────────── */
+.risk-low {
+  color: hsl(var(--status-safe));
+  background-color: hsl(var(--status-safe) / 0.12);
+  border-color: hsl(var(--status-safe) / 0.25);
+}
+.risk-moderate {
+  color: hsl(var(--status-watch));
+  background-color: hsl(var(--status-watch) / 0.12);
+  border-color: hsl(var(--status-watch) / 0.25);
+}
+.risk-high {
+  color: hsl(var(--status-warning));
+  background-color: hsl(var(--status-warning) / 0.12);
+  border-color: hsl(var(--status-warning) / 0.25);
+}
+.risk-critical {
+  color: hsl(var(--status-critical));
+  background-color: hsl(var(--status-critical) / 0.12);
+  border-color: hsl(var(--status-critical) / 0.25);
+}
+.risk-info {
+  color: hsl(var(--status-info));
+  background-color: hsl(var(--status-info) / 0.12);
+  border-color: hsl(var(--status-info) / 0.25);
+}
+
+/* Alert severity bands */
+.alert-info     { @apply bg-blue-500/10   border-blue-500/30   text-blue-700   dark:text-blue-400; }
+.alert-watch    { @apply bg-yellow-500/10 border-yellow-500/30 text-yellow-700 dark:text-yellow-400; }
+.alert-warning  { @apply bg-orange-500/10 border-orange-500/30 text-orange-700 dark:text-orange-400; }
+.alert-critical { @apply bg-red-500/10    border-red-500/30    text-red-700    dark:text-red-400; }
+
+/* ─── SKELETON LOADERS ──────────────────────────────────────────────────── */
+.skeleton {
+  border-radius: 0.5rem;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted-foreground) / 0.15) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── WEATHER ANIMATIONS ────────────────────────────────────────────────── */
+@keyframes rain-fall {
+  0%   { transform: translateY(-8px); opacity: 0; }
+  20%  { opacity: 0.8; }
+  100% { transform: translateY(24px); opacity: 0; }
+}
+
+@keyframes lightning-flash {
+  0%, 95%, 100% { opacity: 0; }
+  96%, 98%      { opacity: 1; }
+  97%, 99%      { opacity: 0.3; }
+}
+
+@keyframes cloud-drift {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(6px); }
+}
+
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.9; }
+  50%       { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes alert-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.rain-drop { animation: rain-fall var(--dur, 0.9s) ease-in var(--delay, 0s) infinite; }
+.lightning { animation: lightning-flash 3.5s linear infinite; }
+.cloud-anim { animation: cloud-drift 4s ease-in-out infinite; }
+.sun-anim   { animation: sun-pulse 3s ease-in-out infinite; }
+.alert-anim { animation: alert-pulse 2s ease-in-out infinite; }
+
+/* ─── SCROLLBAR ─────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* ─── LEAFLET MAP ───────────────────────────────────────────────────────── */
+.dark .leaflet-tile-pane {
+  filter: brightness(0.72) contrast(1.06) saturate(0.88);
+}
+.leaflet-container {
+  background: hsl(var(--muted));
+  border-radius: 0.75rem;
+}
+.leaflet-popup-content-wrapper {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  box-shadow: var(--shadow-elevated) !important;
+  border-radius: 0.75rem !important;
+}
+.leaflet-popup-tip {
+  background: hsl(var(--card)) !important;
+}
+
+/* ─── FOCUS ─────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ─── REDUCED MOTION ────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .rain-drop, .lightning, .cloud-anim, .sun-anim, .alert-anim, .skeleton {
+    animation: none !important;
+  }
+}
+
+/* ─── FORM CONTROLS ─────────────────────────────────────────────────────── */
+select, input[type="checkbox"] { color-scheme: light dark; }
+
+/* ─── PROSE ─────────────────────────────────────────────────────────────── */
+.prose-weather {
+  line-height: 1.65;
+}
+.prose-weather strong { color: hsl(var(--foreground)); }
+.prose-weather code {
+  font-size: 0.85em;
+  background: hsl(var(--muted));
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+/* ─── PAGE TRANSITION HELPERS ───────────────────────────────────────────── */
+.page-enter { animation: fadeSlideIn 0.3s ease-out; }
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── MOBILE SAFE AREA ──────────────────────────────────────────────────── */
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }

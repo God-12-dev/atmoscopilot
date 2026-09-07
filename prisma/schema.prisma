@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String
+  tempUnit      String    @default("C") // C or F
+  windUnit      String    @default("kmh") // kmh or mph
+  weatherAlerts Boolean   @default(true)
+  dailyForecast Boolean   @default(true)
+  language      String    @default("en") // en, kn, hi, te, ta, ml, mr, bn
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  favorites     FavoriteLocation[]
+  conversations Conversation[]
+}
+
+model Location {
+  id        String   @id @default(cuid())
+  name      String
+  state     String?
+  country   String?
+  lat       Float
+  lon       Float
+  createdAt DateTime @default(now())
+
+  favorites     FavoriteLocation[]
+  conversations Conversation[]
+  snapshots     WeatherSnapshot[]
+  alerts        Alert[]
+
+  @@unique([lat, lon])
+}
+
+model FavoriteLocation {
+  id         String   @id @default(cuid())
+  userId     String
+  locationId String
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, locationId])
+}
+
+model Conversation {
+  id         String   @id @default(cuid())
+  userId     String
+  locationId String?
+  title      String   @default("New conversation")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location Location? @relation(fields: [locationId], references: [id])
+  messages Message[]
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String // "user" | "assistant"
+  content        String
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model WeatherSnapshot {
+  id         String   @id @default(cuid())
+  locationId String
+  tempC      Float
+  feelsLikeC Float
+  condition  String
+  humidity   Int
+  windKph    Float
+  pressure   Int
+  uvIndex    Float
+  visibility Float
+  raw        Json
+  fetchedAt  DateTime @default(now())
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+}
+
+model Alert {
+  id          String   @id @default(cuid())
+  locationId  String
+  title       String
+  severity    String // Informational | Moderate | Severe | Extreme
+  description String
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+}
